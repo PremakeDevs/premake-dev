@@ -365,11 +365,15 @@
 -- @param mask
 --    The file search pattern. Use "*" to match any part of a file or
 --    directory name, "**" to recurse into subdirectories.
+-- @param matchType 
+--		folder will match only folders
+--		file will match only files
+--		if not set it will match both
 -- @return
 --    A table containing the matched file or directory names.
 ---
 
-	function os.match(mask)
+	function os.match(mask, matchType)
 		mask = path.normalize(mask)
 		local starpos = mask:find("%*")
 		local before = path.getdirectory(starpos and mask:sub(1, starpos - 1) or mask)
@@ -385,14 +389,14 @@
 
 		if recurse then
 			local submask = mask:sub(1, starpos) .. mask:sub(starpos + 2)
-			results = os.match(submask)
+			results = os.match(submask, matchType)
 
 			local pattern = mask:sub(1, starpos)
 			local m = os.matchstart(pattern)
 			while os.matchnext(m) do
 				if not os.matchisfile(m) then
 					local matchpath = path.join(before, os.matchname(m), mask:sub(starpos))
-					results = table.join(results, os.match(matchpath))
+					results = table.join(results, os.match(matchpath, matchType))
 				end
 			end
 			os.matchdone(m)
@@ -402,10 +406,17 @@
 				while os.matchnext(m) do
 				if not (slashpos and os.matchisfile(m)) then
 					local matchpath = path.join(before, matchpath, os.matchname(m))
+					
 					if after then
-						results = table.join(results, os.match(path.join(matchpath, after)))
+						results = table.join(results, os.match(path.join(matchpath, after), matchType))
 					else
-						table.insert(results, matchpath)
+						if matchType == "file" and os.matchisfile(m) then
+							table.insert(results, matchpath)
+						elseif matchType == "folder" and not os.matchisfile(m) then
+							table.insert(results, matchpath)
+						else -- keep previous behaviour
+							table.insert(results, matchpath)	
+						end	
 						end
 					end
 				end
@@ -427,12 +438,7 @@
 ---
 
 	function os.matchdirs(mask)
-		local results = os.match(mask)
-		for i = #results, 1, -1 do
-			if not os.isdir(results[i]) then
-				table.remove(results, i)
-			end
-		end
+		local results = os.match(mask, "folder")
 		return results
 	end
 
@@ -448,12 +454,7 @@
 ---
 
 	function os.matchfiles(mask)
-		local results = os.match(mask)
-		for i = #results, 1, -1 do
-			if not os.isfile(results[i]) then
-				table.remove(results, i)
-			end
-		end
+		local results = os.match(mask, "file")
 		return results
 	end
 
