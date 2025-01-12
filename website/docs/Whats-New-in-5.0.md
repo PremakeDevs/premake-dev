@@ -146,7 +146,6 @@ title: What's New in 5.0
 
 ## Deprecated Values and Functions ##
 
-* [buildrule](buildrule.md)
 * [flags](flags.md):
 	* Component
 	* EnableSSE, EnableSSE2: use [vectorextensions](vectorextensions.md) instead

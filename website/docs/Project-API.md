@@ -25,7 +25,6 @@
 | [buildmessage](buildmessage.md)                           |  |
 | [buildoptions](buildoptions.md)                           | Additional build options (passed directly to compiler) |
 | [buildoutputs](buildoutputs.md)                           |  |
-| [buildrule](buildrule.md)                                 |  |
 | [callingconvention](callingconvention.md)                 | Sets the function calling convention |
 | [cdialect](cdialect.md)                                   |  |
 | [characterset](characterset.md)                           | Set the character encoding |

@@ -95,13 +95,6 @@
 	}
 
 	api.register {
-		name = "buildrule",     -- DEPRECATED
-		scope = "config",
-		kind = "table",
-		tokens = true,
-	}
-
-	api.register {
 		name = "characterset",
 		scope = "config",
 		kind = "string",
@@ -1201,24 +1194,6 @@
 	api.alias("fileextension", "fileExtension")
 	api.alias("propertydefinition", "propertyDefinition")
 	api.alias("removefiles", "excludes")
-
-
------------------------------------------------------------------------------
---
--- Handlers for deprecated fields and values.
---
------------------------------------------------------------------------------
-
-	-- 13 Apr 2017
-
-	api.deprecateField("buildrule", 'Use `buildcommands`, `buildoutputs`, and `buildmessage` instead.',
-	function(value)
-		if value.description then
-			buildmessage(value.description)
-		end
-		buildcommands(value.commands)
-		buildoutputs(value.outputs)
-	end)
 
 -----------------------------------------------------------------------------
 --

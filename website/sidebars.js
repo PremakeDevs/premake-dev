@@ -78,7 +78,6 @@ module.exports = {
 						'buildmessage',
 						'buildoptions',
 						'buildoutputs',
-						'buildrule',
 						'buildstlmodules',
 						'callingconvention',
 						'cdialect',
