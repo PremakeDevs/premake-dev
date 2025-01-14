@@ -355,7 +355,7 @@ if premake.action.supports("None") then
 		{
 			"website/blog/**",
 			"website/community/**",
-			"website/doc/**",
+			"website/docs/**",
 			"website/src/**",
 			"website/static/**",
 			"website/*"
