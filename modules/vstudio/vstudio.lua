@@ -36,10 +36,6 @@
 		win32   = "x86",
 	}
 
-	if _ACTION < "vs2015" then
-		vstudio.vs2010_architectures.android = "Android"
-	end
-
 	local function architecture(system, arch)
 		local result
 		if _ACTION >= "vs2010" then
