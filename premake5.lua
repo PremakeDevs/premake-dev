@@ -192,6 +192,27 @@
 --    symbols "On"
 --
 
+	local function retrieve_git_tag()
+		local git_tag, errorCode = os.outputof("git describe --tag --exact-match")
+		if errorCode == 0 then
+			return git_tag
+		else
+			return nil
+		end
+	end
+
+	if premake.action.isConfigurable() then
+		local git_tag = retrieve_git_tag() or io.readfile("git-tags.txt")
+		
+		if git_tag == "$Format:%(describe:tags=true)$" then
+			git_tag = nil
+		end
+		if git_tag and git_tag:startswith('v') then -- tags use v5.x.x-xxx format whereas premake uses 5.x.x-xxx
+			git_tag = git_tag:strsub(2)
+		end
+		print("Current git tag: ", git_tag)
+	end
+
 	solution "Premake5"
 		configurations { "Release", "Debug" }
 		location ( _OPTIONS["to"] )
@@ -277,6 +298,10 @@
 			"contrib/**.*",
 			"binmodules/**.*"
 		}
+
+		if git_tag then
+			defines { 'PREMAKE_VERSION="' .. git_tag .. '"'}
+		end
 
 		filter { "options:lua-src=contrib" }
 			includedirs { "contrib/lua/src", "contrib/luashim" }
